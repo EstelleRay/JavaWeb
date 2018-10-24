@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.20)
-# Date: 2018-10-17 11:50:57
+# Date: 2018-10-24 11:20:05
 # Generator: MySQL-Front 5.3  (Build 1.21)
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -35,7 +35,7 @@ CREATE TABLE `tb_user` (
 # Data for table "tb_user"
 #
 
-INSERT INTO `tb_user` VALUES ('1','1','1','1','11','1','1');
+INSERT INTO `tb_user` VALUES ('1','1','1','1','11','1','1'),('2','2','2','e0052341-92b8-4a48-abdc-211dfa4d3fd3_Koala.jpg','f','2','2');
 
 #
 # Source for table "users"
