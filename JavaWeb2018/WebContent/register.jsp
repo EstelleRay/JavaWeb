@@ -19,7 +19,7 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin" action="RegisterServlet">
+    <form class="form-signin" action="RegisterServlet" method="post" enctype="multipart/form-data">
       <img class="mb-4" src="./img/bootstrap-solid.svg" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
       <label for="stuId" class="sr-only">ID</label>
@@ -29,9 +29,12 @@
       <label for="password" class="sr-only">Password</label>
       <input type="text" id="password" name="password" class="form-control" placeholder="Password" required>
       <label for="avatar" class="sr-only">Avatar</label>
-      <input type="text" id="avatar" name="avatar" class="form-control" placeholder="Avatar">
+      <input type="file" id="avatar" name="avatar" class="form-control" placeholder="Avatar">
       <label for="gender" class="sr-only">Gender</label>
-      <input type="text" id="gender" name="gender" class="form-control" placeholder="Gender">
+      <select id="gender" class="form-control" name="gender" required>
+      	<option value="f">Female</option>
+      	<option value="m">Male</option>
+      </select>
       <label for="bio" class="sr-only">Bio</label>
       <input type="text" id="bio" name="bio" class="form-control" placeholder="Bio">
       <label for="gitUrl" class="sr-only">Git Url</label>

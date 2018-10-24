@@ -48,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 			result = true;
 		}
 		
+		//请求转发
 		RequestDispatcher rDispatcher = request.getRequestDispatcher("result.jsp");
 		request.setAttribute("resMessage", result==true?"登陆成功":"登陆失败");
 		rDispatcher.forward(request, response);
