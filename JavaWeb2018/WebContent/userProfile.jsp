@@ -23,7 +23,7 @@
   <body>
 
     <div class="container">
-      <%@include file="./compenents/header.jsp" %>
+      <%@include file="./components/header.jsp" %>
 
       <div class="nav-scroller py-1 mb-2">
         <nav class="nav d-flex justify-content-between">
@@ -98,6 +98,6 @@
 
     </main><!-- /.container -->
 
-    <%@include file="compenents/footer.jsp" %>>
+    <%@include file="components/footer.jsp" %>>
   </body>
 </html>

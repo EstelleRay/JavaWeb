@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.EstelleRay.bean.User;
 import org.EstelleRay.dao.UserDao;
@@ -50,6 +51,11 @@ request.setCharacterEncoding("utf-8");
 		boolean result = false;
 		UserDao userDao = new UserDao();
 		User user = userDao.query(stuId);
+		//ÉèÖÃsession
+		HttpSession session = request.getSession(true);
+		user.setPassword("");
+		session.setAttribute("User", user);
+		//
 		if (user != null && user.getPassword().equals(password)) {
 			result = true;
 			if (rememberMe != null && "on".equals(rememberMe)) {
@@ -70,8 +76,8 @@ request.setCharacterEncoding("utf-8");
 			}
 		}
 		
-		RequestDispatcher rDispatcher = request.getRequestDispatcher("result.jsp");
-		request.setAttribute("resMessage", result==true?"µÇÂ¼³É¹¦":"µÇÂ¼Ê§°Ü");
+		RequestDispatcher rDispatcher = request.getRequestDispatcher("index.jsp");
+//		request.setAttribute("resMessage", result==true?"µÇÂ¼³É¹¦":"µÇÂ¼Ê§°Ü");
 		rDispatcher.forward(request, response);
 	}
 
