@@ -36,7 +36,7 @@
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-                <form class="form-horizontal" method="post" action="NewPostAction">
+                <form class="form-horizontal" method="post" action="NewPostServlet">
                     <div class="form-group">
                         <div class="row">
                             <label for="postTitle" class="col-sm-2 control-label">
