@@ -51,13 +51,16 @@ public class LoginServlet extends HttpServlet {
 		boolean result = false;
 		UserDao userDao = new UserDao();
 		User user = userDao.query(stuId);
-		//…Ë÷√session
-		HttpSession session = request.getSession(true);
-		user.setPassword("");
-		session.setAttribute("User", user);
-		//
+		
 		if (user != null && user.getPassword().equals(password)) {
 			result = true;
+			
+			//…Ë÷√session
+			HttpSession session = request.getSession(true);
+			user.setPassword("");
+			session.setAttribute("User", user);
+			
+			// …Ë÷√cookie
 			if (rememberMe != null && "on".equals(rememberMe)) {
 				Cookie cookieStuId = new Cookie("stuId", Base64.encode(stuId.getBytes()));
 				Cookie cookiePassword = new Cookie("password", Base64.encode(password.getBytes()));
@@ -75,6 +78,8 @@ public class LoginServlet extends HttpServlet {
 				}
 			}
 		}
+
+		
 		
 		RequestDispatcher rDispatcher = request.getRequestDispatcher("index.jsp");
 //		request.setAttribute("resMessage", result==true?"µ«¬º≥…π¶":"µ«¬º ß∞‹");

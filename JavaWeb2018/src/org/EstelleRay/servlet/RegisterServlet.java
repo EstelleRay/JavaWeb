@@ -66,7 +66,7 @@ public class RegisterServlet extends HttpServlet {
 		if(!f.exists()) {
 			f.mkdirs();
 		}
-		part.write(filePath+"/"+part.getSubmittedFileName());
+		part.write(filePath+"/"+newFileName);
 		String avatar = newFileName;
 		
 		
