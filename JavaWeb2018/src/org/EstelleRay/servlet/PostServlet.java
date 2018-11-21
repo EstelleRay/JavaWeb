@@ -35,13 +35,29 @@ public class PostServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PostDao postDao =new PostDao();
-		List<Post> posts = postDao.queryAll();
+		request.setCharacterEncoding("UTF-8");
 		
-		Map<String,User> postAuthors = getPostAuthors(posts);
-		request.setAttribute("posts", posts);
-		request.setAttribute("postAuthors", postAuthors);
-		request.getRequestDispatcher("components/post_content.jsp").include(request, response);
+		String action = request.getParameter("action");
+		String author = request.getParameter("author");
+		PostDao postDao = new PostDao();
+		
+		if(action.equals("listposts")){
+			List<Post> posts = null;
+			if(null != author && !"".equals(author)){
+				posts = postDao.queryByAuthor(author);
+			}else {
+				posts = postDao.queryAll();
+			}
+			Map<String,User> postAuthors = getPostAuthors(posts);
+			Map<Integer, Integer> postCommentCount = getPostCommentCount(posts);
+			request.setAttribute("posts", posts);
+			request.setAttribute("postAuthors", postAuthors);
+			request.setAttribute("postCommentCount", postCommentCount);
+			request.getRequestDispatcher("components/post_content.jsp").include(request, response);
+		}else if(action.equals("listpost")) {
+			
+		}
+		
 	}
 
 	/**
@@ -61,6 +77,17 @@ public class PostServlet extends HttpServlet {
 				user.setPassword("");
 				map.put(user.getStuId(), user);
 			}
+		}
+		
+		return map;
+	}
+	
+	private Map<Integer, Integer> getPostCommentCount(List<Post> posts){
+		Map<Integer, Integer> map =new HashMap<Integer, Integer>();
+		UserDao userDao =new UserDao();
+		for(Post post : posts) {
+			List<Comment> list = CommentDao.queryByPostId(post.getPostId());
+			map.put(post.getPostId(), list.size());
 		}
 		
 		return map;

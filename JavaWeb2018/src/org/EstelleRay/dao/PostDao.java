@@ -33,11 +33,12 @@ public class PostDao {
 	public List<Post> queryAll() {
 		Connection connection = DBUnit.getConneciton();
 		String sql = "SELECT * FROM tb_posts";
+		PreparedStatement pStatement = null;
 		ResultSet rs = null;
 		List<Post> posts =new ArrayList<>();
 		try {
-			PreparedStatement pStatment = connection.prepareStatement(sql);
-			rs = pStatment.executeQuery();
+			pStatement = connection.prepareStatement(sql);
+			rs = pStatement.executeQuery();
 			while(rs.next()) {
 				Post post = new Post();
 				post.setPostId(rs.getInt(1));
@@ -54,5 +55,80 @@ public class PostDao {
 		}
 		
 		return posts;
+	}
+	
+	public List<Post> queryByAuthor(String author){
+		Connection connection = DBUnit.getConneciton();
+		String sql = "SELECT * FROM tb_posts WHERE author? ORDER BY posttime DESC";
+		PreparedStatement pStatement = null;
+		ResultSet rs = null;
+		List<Post> posts = new ArrayList<Post>();
+		try {
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setString(1, author);
+			rs = pStatement.executeQuery();
+			
+			while(rs.next()) {
+				Post post = new Post();
+				post.setPostId(rs.getInt(1));
+				post.setAuthor(rs.getString(2));
+				post.setTitle(rs.getString(3));
+				post.setContent(rs.getString(4));
+				post.setPosttime(rs.getTimestamp(5));
+				post.setPv(rs.getInt(6));
+				posts.add(post);
+
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUnit.closeJDBC(null, pStatement, connection);
+		}
+		return posts;
+	}
+	
+	public Post queryById(int id) {
+		Connection connection = DBUnit.getConneciton();
+		String sql = "SELECT * FROM tb_posts WHERE Id=?";
+		String sql2 = "UPDATE tb_posts SET pv=pv+1 WHERE Id=?";
+		PreparedStatement pStatement = null;
+		ResultSet rs = null;
+		int result = 0;
+		Post post =null;
+		try {
+			connection.setAutoCommit(false);
+			pStatement = connection.prepareStatement(sql2);
+			pStatement.setInt(1, id);
+			result = pStatement.executeUpdate();
+			if(result == 0) throw new Exception("update pv failed!");
+			
+			pStatement.close();
+			
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setInt(1, id);
+			rs = pStatement.executeQuery();
+			
+			if(rs.next()) {
+				post = new Post();
+				post.setPostId(rs.getInt(1));
+				post.setAuthor(rs.getString(2));
+				post.setTitle(rs.getString(3));
+				post.setContent(rs.getString(4));
+				post.setPosttime(rs.getTimestamp(5));
+				post.setPv(rs.getInt(6));
+			}
+			
+			connection.commit();
+		}catch(Exception e) {
+			try {
+				connection.rollback();
+			}catch(Exception e1) {
+				e.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally {
+			DBUnit.closeJDBC(null, pStatement, connection);
+		}
+		return post;
 	}
 }
