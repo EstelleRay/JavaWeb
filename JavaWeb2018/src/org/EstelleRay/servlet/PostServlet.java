@@ -1,6 +1,7 @@
 package org.EstelleRay.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.EstelleRay.bean.Comment;
 import org.EstelleRay.bean.Post;
 import org.EstelleRay.bean.User;
+import org.EstelleRay.dao.CommentDao;
 import org.EstelleRay.dao.PostDao;
 import org.EstelleRay.dao.UserDao;
 
@@ -39,6 +42,7 @@ public class PostServlet extends HttpServlet {
 		
 		String action = request.getParameter("action");
 		String author = request.getParameter("author");
+		String postid = request.getParameter("postid");
 		PostDao postDao = new PostDao();
 		
 		if(action.equals("listposts")){
@@ -55,7 +59,16 @@ public class PostServlet extends HttpServlet {
 			request.setAttribute("postCommentCount", postCommentCount);
 			request.getRequestDispatcher("components/post_content.jsp").include(request, response);
 		}else if(action.equals("listpost")) {
-			
+			if(null != postid && !".".equals(postid)) {
+				Post post = postDao.queryById(Integer.parseInt(postid));
+				List<Post> posts = new ArrayList<>();
+				posts.add(post);
+				Map<String, User> postAuthors = getPostAuthors(posts);
+				Map<Integer, Integer> postCommentCount = getPostCommentCount(posts);
+				request.setAttribute("post", post);
+				request.setAttribute("postAuthors", postAuthors);
+				request.setAttribute("postCommentCount", postCommentCount);
+			}
 		}
 		
 	}
@@ -84,9 +97,9 @@ public class PostServlet extends HttpServlet {
 	
 	private Map<Integer, Integer> getPostCommentCount(List<Post> posts){
 		Map<Integer, Integer> map =new HashMap<Integer, Integer>();
-		UserDao userDao =new UserDao();
+		CommentDao commentDao =new CommentDao();
 		for(Post post : posts) {
-			List<Comment> list = CommentDao.queryByPostId(post.getPostId());
+			List<Comment> list = commentDao.queryByPostId(post.getPostId());
 			map.put(post.getPostId(), list.size());
 		}
 		
