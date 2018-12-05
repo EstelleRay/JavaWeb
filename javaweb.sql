@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.20)
-# Date: 2018-11-07 11:57:17
+# Date: 2018-12-05 11:33:58
 # Generator: MySQL-Front 5.3  (Build 1.21)
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -35,7 +35,7 @@ CREATE TABLE `tb_user` (
 # Data for table "tb_user"
 #
 
-INSERT INTO `tb_user` VALUES ('1','1','1','1','11','1','1'),('2','2','2','e0052341-92b8-4a48-abdc-211dfa4d3fd3_Koala.jpg','f','2','2');
+INSERT INTO `tb_user` VALUES ('1','1','1','1','11','1','1'),('2','2','2','e0052341-92b8-4a48-abdc-211dfa4d3fd3_Koala.jpg','f','2','2'),('3','123','3','5562b7ea-af07-4674-8cc2-09cf16728e66_Desert.jpg','m','','');
 
 #
 # Source for table "tb_posts"
@@ -52,13 +52,36 @@ CREATE TABLE `tb_posts` (
   PRIMARY KEY (`Id`),
   KEY `post_author_stuId` (`author`),
   CONSTRAINT `post_author_stuId` FOREIGN KEY (`author`) REFERENCES `tb_user` (`stuId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "tb_posts"
 #
 
-INSERT INTO `tb_posts` VALUES (1,'1','222','2222222222222','2018-11-07 11:52:45',0),(2,'1','333','33','2018-11-07 11:55:27',0);
+INSERT INTO `tb_posts` VALUES (1,'1','222','2222222222222','2018-11-07 11:52:45',0),(2,'1','333','33','2018-11-07 11:55:27',0),(3,'3','111','111','2018-12-05 10:21:11',0);
+
+#
+# Source for table "tb_comments"
+#
+
+DROP TABLE IF EXISTS `tb_comments`;
+CREATE TABLE `tb_comments` (
+  `commentId` int(11) NOT NULL AUTO_INCREMENT,
+  `author` varchar(255) NOT NULL DEFAULT '',
+  `content` varchar(255) NOT NULL DEFAULT '',
+  `postId` int(11) NOT NULL DEFAULT '0',
+  `posttime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`commentId`),
+  KEY `commentAuthor_UserStuID` (`author`),
+  KEY `commentPostId_PostsId` (`postId`),
+  CONSTRAINT `commentPostId_PostsId` FOREIGN KEY (`postId`) REFERENCES `tb_posts` (`Id`),
+  CONSTRAINT `commentAuthor_UserStuID` FOREIGN KEY (`author`) REFERENCES `tb_user` (`stuId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# Data for table "tb_comments"
+#
+
 
 #
 # Source for table "users"

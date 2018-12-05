@@ -11,10 +11,12 @@ import org.EstelleRay.bean.Post;
 import org.EstelleRay.bean.User;
 import org.EstelleRay.util.DBUnit;
 
+import com.sun.org.apache.bcel.internal.generic.DDIV;
+
 public class PostDao {
 	public boolean create(Post post) {
 		Connection connection = DBUnit.getConneciton();
-		String sql = "INSERT INTO tb_posts(author,title,content,pv) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO tb_posts(author,title,content) VALUES(?,?,?)";
 		int result =0;
 		
 		try {
@@ -22,7 +24,6 @@ public class PostDao {
 			pStatement.setString(1,post.getAuthor());
 			pStatement.setString(2, post.getTitle());
 			pStatement.setString(3, post.getContent());
-			pStatement.setInt(4, post.getPv());
 			result = pStatement.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -32,7 +33,7 @@ public class PostDao {
 	}
 	public List<Post> queryAll() {
 		Connection connection = DBUnit.getConneciton();
-		String sql = "SELECT * FROM tb_posts";
+		String sql = "SELECT * FROM tb_posts ORDER BY posttime DESC";
 		PreparedStatement pStatement = null;
 		ResultSet rs = null;
 		List<Post> posts =new ArrayList<>();
@@ -52,6 +53,8 @@ public class PostDao {
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			DBUnit.closeJDBC(null, pStatement, connection);
 		}
 		
 		return posts;
@@ -59,7 +62,7 @@ public class PostDao {
 	
 	public List<Post> queryByAuthor(String author){
 		Connection connection = DBUnit.getConneciton();
-		String sql = "SELECT * FROM tb_posts WHERE author? ORDER BY posttime DESC";
+		String sql = "SELECT * FROM tb_posts WHERE author=? ORDER BY posttime DESC";
 		PreparedStatement pStatement = null;
 		ResultSet rs = null;
 		List<Post> posts = new ArrayList<Post>();
@@ -87,7 +90,7 @@ public class PostDao {
 		return posts;
 	}
 	
-	public Post queryById(int id) {
+	public Post queryById(int id, boolean addpv) {
 		Connection connection = DBUnit.getConneciton();
 		String sql = "SELECT * FROM tb_posts WHERE Id=?";
 		String sql2 = "UPDATE tb_posts SET pv=pv+1 WHERE Id=?";
@@ -97,12 +100,14 @@ public class PostDao {
 		Post post =null;
 		try {
 			connection.setAutoCommit(false);
-			pStatement = connection.prepareStatement(sql2);
-			pStatement.setInt(1, id);
-			result = pStatement.executeUpdate();
-			if(result == 0) throw new Exception("update pv failed!");
-			
-			pStatement.close();
+			if(addpv) {
+				pStatement = connection.prepareStatement(sql2);
+				pStatement.setInt(1, id);
+				result = pStatement.executeUpdate();
+				if(result == 0) throw new Exception("update pv failed!");
+				
+				pStatement.close();
+			}
 			
 			pStatement = connection.prepareStatement(sql);
 			pStatement.setInt(1, id);

@@ -1,0 +1,30 @@
+.blog-comment {
+    margin-bottom: 20px;
+}
+
+.blog-comment .blog-post-meta {
+    margin-bottom: 5px;
+}
+
+.blog-comment .avatar {
+    display: block;
+    float: left;
+}
+
+.blog-comment .avatar img {
+    width: 48px;
+}
+
+.blog-comment textarea {
+    margin-bottom: 12px;
+}
+
+.blog-comment .content {
+    margin-left: 60px;
+}
+
+
+.blog-comment .newcontent {
+    margin-left: 60px;
+}
+

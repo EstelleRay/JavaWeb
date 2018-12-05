@@ -38,11 +38,11 @@
 			<jsp:param name="action" value="listpost" />
 			<jsp:param name="postid" value="${param.postid }" />
 		</jsp:include>
-		<%@ include file="./components/post_content.jsp" %>
 		<jsp:include page='${"CommentServlet"}' >
 			<jsp:param name="action" value="listcomments" />
 			<jsp:param name="postid" value="${param.postid }" />
 		</jsp:include>
+		<%@ include file="./components/post_content.jsp" %>
 		<%@ include file="./components/post-comments.jsp" %>
 	  </main>
 	  <!-- /.container -->

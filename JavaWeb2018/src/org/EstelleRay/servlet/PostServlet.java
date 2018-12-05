@@ -46,6 +46,7 @@ public class PostServlet extends HttpServlet {
 		PostDao postDao = new PostDao();
 		
 		if(action.equals("listposts")){
+			int postCount = 0;
 			List<Post> posts = null;
 			if(null != author && !"".equals(author)){
 				posts = postDao.queryByAuthor(author);
@@ -57,17 +58,19 @@ public class PostServlet extends HttpServlet {
 			request.setAttribute("posts", posts);
 			request.setAttribute("postAuthors", postAuthors);
 			request.setAttribute("postCommentCount", postCommentCount);
-			request.getRequestDispatcher("components/post_content.jsp").include(request, response);
+			request.getRequestDispatcher("components/posts-content.jsp").include(request, response);
 		}else if(action.equals("listpost")) {
 			if(null != postid && !".".equals(postid)) {
-				Post post = postDao.queryById(Integer.parseInt(postid));
-				List<Post> posts = new ArrayList<>();
-				posts.add(post);
-				Map<String, User> postAuthors = getPostAuthors(posts);
-				Map<Integer, Integer> postCommentCount = getPostCommentCount(posts);
+				Post post = postDao.queryById(Integer.parseInt(postid),false);
+				UserDao userDao = new UserDao();
+				User postAuthor = userDao.query(post.getAuthor());
 				request.setAttribute("post", post);
-				request.setAttribute("postAuthors", postAuthors);
-				request.setAttribute("postCommentCount", postCommentCount);
+				request.setAttribute("postAuthors", postAuthor);
+			}
+		}else if (action.equals("editpost")) {
+			if(null != postid && !"".equals(postid)) {
+				Post post = postDao.queryById(Integer.parseInt(postid),false);
+				request.setAttribute("post", post);
 			}
 		}
 		
