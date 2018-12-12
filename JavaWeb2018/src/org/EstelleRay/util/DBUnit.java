@@ -16,7 +16,7 @@ public class DBUnit {
 	static {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("数据库驱动加载成功！！");
+			//System.out.println("数据库驱动加载成功！！");
 		}catch(ClassNotFoundException e){
 			e.getException();
 		}
@@ -32,9 +32,9 @@ public class DBUnit {
 //			System.out.println(url);
 //			System.out.println(password);
 			connection = DriverManager.getConnection(url, user, password);
-			System.out.println("成功地获取数据库连接！！");
+			//System.out.println("成功地获取数据库连接！！");
 		}catch(SQLException e) {
-			System.out.println("创建数据库连接失败！");
+			//System.out.println("创建数据库连接失败！");
 			e.getStackTrace();
 		}
 		return connection;

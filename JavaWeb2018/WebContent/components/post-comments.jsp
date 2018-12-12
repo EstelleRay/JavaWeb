@@ -31,11 +31,11 @@
 					<img src="img/upload/${User.avatar }" />
 				</div>
 				<div class="blog-comment newcontent">
-					<form action="NewCommentAction" method="post">
+					<form action="NewCommentServlet" method="post">
 						<textarea id="comment" name="comment" class="form-control"
 							placeholder="Write your comments (less than 1000 words, markdown grammar is supported)"
 							rows="5" required></textarea>
-						<input id="postid" name="postid" type="hidden" value="${postid }" />
+						<input id="postid" name="postid" type="hidden" value="${post.postId }" />
 						<button class="btn btn-lg btn-primary" type="submit">Commit</button>
 					</form>
 				</div>

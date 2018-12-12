@@ -31,7 +31,7 @@ public class CommentDao {
 	}
 	public boolean delete(int id) {
 		Connection connection = DBUnit.getConneciton();
-		String sql = "DELETE FROM tb_comments WHERE Id=?";
+		String sql = "DELETE FROM tb_comments WHERE commentId=?";
 		PreparedStatement pStatement = null;
 		int result = 0;
 		try {
@@ -72,5 +72,33 @@ public class CommentDao {
 		}
 		
 		return comments;
+	}
+	
+	public Comment queryById(int id) {
+		Comment comment = null;
+		String sql = "SELECT * FROM tb_comments WHERE commentId=?";
+		Connection connection = DBUnit.getConneciton();
+		PreparedStatement pStatement = null;
+		ResultSet rs = null;
+		try {
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setInt(1, id);
+			rs = pStatement.executeQuery();
+			
+			if (rs.next()) {
+				comment = new Comment();
+				comment.setCommentId(rs.getInt(1));
+				comment.setAuthor(rs.getString(2));
+				comment.setPostId(rs.getInt(3));
+				comment.setContent(rs.getString(4));
+				comment.setPosttime(rs.getTimestamp(5));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUnit.closeJDBC(rs, pStatement, connection);
+		}
+		
+		return comment;
 	}
 }

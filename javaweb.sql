@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.20)
-# Date: 2018-12-05 11:33:58
+# Date: 2018-12-12 11:42:01
 # Generator: MySQL-Front 5.3  (Build 1.21)
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -52,7 +52,7 @@ CREATE TABLE `tb_posts` (
   PRIMARY KEY (`Id`),
   KEY `post_author_stuId` (`author`),
   CONSTRAINT `post_author_stuId` FOREIGN KEY (`author`) REFERENCES `tb_user` (`stuId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "tb_posts"
@@ -68,20 +68,21 @@ DROP TABLE IF EXISTS `tb_comments`;
 CREATE TABLE `tb_comments` (
   `commentId` int(11) NOT NULL AUTO_INCREMENT,
   `author` varchar(255) NOT NULL DEFAULT '',
-  `content` varchar(255) NOT NULL DEFAULT '',
   `postId` int(11) NOT NULL DEFAULT '0',
+  `content` varchar(255) NOT NULL DEFAULT '',
   `posttime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`commentId`),
   KEY `commentAuthor_UserStuID` (`author`),
   KEY `commentPostId_PostsId` (`postId`),
-  CONSTRAINT `commentPostId_PostsId` FOREIGN KEY (`postId`) REFERENCES `tb_posts` (`Id`),
-  CONSTRAINT `commentAuthor_UserStuID` FOREIGN KEY (`author`) REFERENCES `tb_user` (`stuId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT `commentAuthor_UserStuID` FOREIGN KEY (`author`) REFERENCES `tb_user` (`stuId`),
+  CONSTRAINT `commentPostId_PostsId` FOREIGN KEY (`postId`) REFERENCES `tb_posts` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "tb_comments"
 #
 
+INSERT INTO `tb_comments` VALUES (1,'2',3,'2','2018-12-12 10:07:07'),(2,'2',3,'2','2018-12-12 10:07:12'),(3,'2',3,'2','2018-12-12 10:07:34'),(4,'2',3,'3','2018-12-12 10:07:55'),(5,'2',3,'3','2018-12-12 10:19:56'),(6,'2',3,'3','2018-12-12 10:20:01'),(7,'2',3,'3','2018-12-12 10:20:02'),(8,'3',3,'7','2018-12-12 10:21:06'),(9,'3',3,'Q','2018-12-12 10:21:30'),(10,'3',3,'Q','2018-12-12 10:21:39'),(11,'3',3,'Q','2018-12-12 10:24:18'),(12,'3',1,'23','2018-12-12 10:28:33'),(13,'3',1,'t','2018-12-12 10:31:36'),(14,'3',1,'r','2018-12-12 10:41:26'),(15,'3',1,'mm','2018-12-12 10:43:43'),(16,'3',1,'w','2018-12-12 10:45:39'),(17,'3',1,'qq','2018-12-12 10:45:49'),(18,'3',2,'w','2018-12-12 10:49:24'),(19,'2',2,'22','2018-12-12 10:51:59'),(20,'2',2,'test','2018-12-12 11:01:47'),(21,'2',2,'test','2018-12-12 11:01:51'),(22,'2',1,'是是是','2018-12-12 11:04:36');
 
 #
 # Source for table "users"

@@ -42,7 +42,7 @@ public class UserDao {
 			PreparedStatement pStatment = connection.prepareStatement(sql);
 			pStatment.setString(1, stuId);
 			rs = pStatment.executeQuery();
-			System.out.print(stuId);
+			//System.out.print(stuId);
 			if(rs.next()) {
 				user = new User();
 				user.setStuId(rs.getString(1));
