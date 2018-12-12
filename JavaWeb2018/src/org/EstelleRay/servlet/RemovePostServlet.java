@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.EstelleRay.bean.User;
+import org.EstelleRay.dao.PostDao;
+
 /**
  * Servlet implementation class RemovePostServlet
  */
@@ -40,6 +43,10 @@ public class RemovePostServlet extends HttpServlet {
 			out.print("</script>");
 			return;
 		}
+		
+		String author = ((User)request.getSession().getAttribute("User")).getStuId();
+		PostDao postDao = new PostDao();
+
 	}
 
 	/**
