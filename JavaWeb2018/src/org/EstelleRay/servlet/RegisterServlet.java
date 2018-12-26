@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.EstelleRay.bean.User;
@@ -76,9 +77,19 @@ public class RegisterServlet extends HttpServlet {
 		boolean result = userDao.create(user);
 		
 		//ÇëÇó×ª·¢
-		RequestDispatcher rDispatcher = request.getRequestDispatcher("result.jsp");
-		request.setAttribute("resMessage", result==true?"×¢²á³É¹¦":"×¢²áÊ§°Ü");
-		rDispatcher.forward(request, response);
+//		RequestDispatcher rDispatcher = request.getRequestDispatcher("result.jsp");
+//		request.setAttribute("resMessage", result==true?"×¢²á³É¹¦":"×¢²áÊ§°Ü");
+//		rDispatcher.forward(request, response);
+		if (result == true) {
+			request.setAttribute("tip", "Register successfully, logining automatically.");
+			HttpSession session = request.getSession(true);
+			user.setPassword("");
+			session.setAttribute("User", user);
+			request.getRequestDispatcher("result.jsp").forward(request, response);
+		} else {
+			request.setAttribute("tip", "Register failed, redirecting to home page.");
+			request.getRequestDispatcher("result.jsp").forward(request, response);
+		}
 	}
 
 }

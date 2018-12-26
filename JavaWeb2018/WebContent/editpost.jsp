@@ -34,7 +34,7 @@
 <br>
 	<jsp:include page='${"PostServlet"}'>
 		<jsp:param name="action" value="editpost" />
-		<jsp:param name="postid" value=${param.postid } />
+		<jsp:param name="postid" value="${param.postid }" />
 	</jsp:include>
     <main role="main" class="container">
         <div class="row">

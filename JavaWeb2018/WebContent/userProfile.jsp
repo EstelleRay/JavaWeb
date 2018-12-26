@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
   <head>
@@ -16,88 +17,166 @@
     <link href="./css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <!-- <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet"> -->
+<!--     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet"> -->
     <link href="./css/blog.css" rel="stylesheet">
+    <link href="./css/userprofile.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
+    
   </head>
+
 
   <body>
 
     <div class="container">
-      <%@include file="./components/header.jsp" %>
 
-      <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-between">
-          <a class="p-2 text-muted" href="#">World</a>
-          <a class="p-2 text-muted" href="#">U.S.</a>
-          <a class="p-2 text-muted" href="#">Technology</a>
-          <a class="p-2 text-muted" href="#">Design</a>
-          <a class="p-2 text-muted" href="#">Culture</a>
-          <a class="p-2 text-muted" href="#">Business</a>
-          <a class="p-2 text-muted" href="#">Politics</a>
-          <a class="p-2 text-muted" href="#">Opinion</a>
-          <a class="p-2 text-muted" href="#">Science</a>
-          <a class="p-2 text-muted" href="#">Health</a>
-          <a class="p-2 text-muted" href="#">Style</a>
-          <a class="p-2 text-muted" href="#">Travel</a>
-        </nav>
-      </div>
+		<%@ include file="./components/header.jsp" %>
 
-    
-
-      
-      
+     	<%@ include file="./components/menu.jsp" %>
     </div>
 
-    <main role="main" class="container">
+	<jsp:include page='${"UserServlet" }'>
+		<jsp:param name="stuId" value="${param.stuId }" /> 
+	</jsp:include>
+    <div class="container">
       <div class="row">
         <div class="col-md-8 blog-main">
+          <div class="card">
+          	<div class="card-header">
+				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+				User Information <c:if test="${not empty tip }"><span class="required-tag">${tip }</span></c:if>
+			</div>
+			<div class="card-block">
+				<div class="user-info">
+				  <c:if test="${profiledUser.stuId.equals(User.stuId) }">
+		          <form class="form-signin" action="UpdateBasicInfoServlet" method="post">		      
+				      <label for="stuName">Name<span class="required-tag">*</span></label>
+				      <input type="text" id="stuName" name="stuName" class="form-control" placeholder="Student Name" value="${User.stuName }" required>
+				      <label for="password">Password</label>
+      				  <input type="text" id="password" name="password" class="form-control" placeholder="Password (Unchanged if leaved blank)">
+				      <label for="gender">Gender</label>
+				      <select id="gender" name="gender" class="form-control">
+				      	<option value="f" ${User.gender=="f" ? "selected" : "" }>Female</option>
+				      	<option value="m" ${User.gender=="m" ? "selected" : "" }>Male</option>
+				      </select>
+				      <label for="bio">Bio</label>
+				      <input type="text" id="bio" name="bio" class="form-control" placeholder="Bio" value="${User.bio }">
+				      <label for="gitUrl">Git Url</label>
+				      <input type="text" id="gitUrl" name="gitUrl" class="form-control" placeholder="Git Url" value="${User.gitUrl }">
+				      <br>
+				      <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+				    </form>
+				    </c:if>
+				    <c:if test="${!profiledUser.stuId.equals(User.stuId) }">	      
+				    <form class="form-signin">
+				      <label for="stuName">Name</label>
+				      <input type="text" id="stuName" name="stuName" class="form-control" value="${profiledUser.stuName }" readonly="readonly">
+				      <label for="gender">Gender</label>				      
+				      <input type="text" id="gender" name="gender" class="form-control" value='${profiledUser.gender=="f" ? "Female" : "Male" }' readonly="readonly">
+				      <label for="bio">Bio</label>
+				      <input type="text" id="bio" name="bio" class="form-control" value="${profiledUser.bio }" readonly="readonly">
+				      <label for="gitUrl">Git Url</label>
+				      <input type="text" id="gitUrl" name="gitUrl" class="form-control" value="${profiledUser.gitUrl }" readonly="readonly">
+				    </form>
+				    </c:if>
+				  </div>
+				  <div class="user-info-right">
+					<div class="user-info-avatar">
+						<img src='./img/upload/${profiledUser.avatar.equals("") ? "../bootstrap-solid.svg" : profiledUser.avatar }' />
+					</div>
+					<c:if test="${profiledUser.stuId.equals(User.stuId) }">
+						<form class="form-signin" action="UpdateAvatarServlet" method="post" enctype="multipart/form-data">
+							<label for="avatar" class="sr-only">Avatar</label>
+	      					<input type="file" id="avatar" name="avatar" class="form-control" placeholder="Avatar">
+	      					<br>
+	      					<button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+	      				</form>
+	      				</c:if>
+				  </div>
+				</div>				
+		    </div>
+		    <br/>
+		    <div class="card card-primary">
+	          	<div class="card-header">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					Top 10 visited posts
+				</div>
+				<div class="card-block">		
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>#Visit</th>
+								<th>#Comment</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>习近平向第五届世界互联网大会致贺信</td>
+								<td>12</td>
+								<td>12</td>
+							</tr>
+							<tr>
+								<td>习近平向第五届世界互联网大会致贺信</td>
+								<td>12</td>
+								<td>12</td>
+							</tr>		
+							<tr>
+								<td>习近平向第五届世界互联网大会致贺信</td>
+								<td>12</td>
+								<td>12</td>
+							</tr>					
+						</tbody>
+					</table>          
+				</div>
+		    </div>
+                   	<br/>
+		    <div class="card card-info">
+	          	<div class="card-header">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					Top 10 commented posts
+				</div>
+				<div class="card-block">	
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>#Comment</th>
+								<th>#Visit</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>习近平向第五届世界互联网大会致贺信</td>
+								<td>12</td>
+								<td>12</td>
+							</tr>		
+							<tr>
+								<td>习近平向第五届世界互联网大会致贺信</td>
+								<td>12</td>
+								<td>12</td>
+							</tr>		
+							<tr>
+								<td>习近平向第五届世界互联网大会致贺信</td>
+								<td>12</td>
+								<td>12</td>
+							</tr>							
+						</tbody>
+					</table>	          
+				</div>
+		    </div>
           
-
-          <nav class="blog-pagination">
-            <a class="btn btn-outline-primary" href="#">Older</a>
-            <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
-          </nav>
 
         </div><!-- /.blog-main -->
 
-        <aside class="col-md-4 blog-sidebar">
-          <div class="p-3 mb-3 bg-light rounded">
-            <h4 class="font-italic">About</h4>
-            <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-          </div>
-
-          <div class="p-3">
-            <h4 class="font-italic">Archives</h4>
-            <ol class="list-unstyled mb-0">
-              <li><a href="#">March 2014</a></li>
-              <li><a href="#">February 2014</a></li>
-              <li><a href="#">January 2014</a></li>
-              <li><a href="#">December 2013</a></li>
-              <li><a href="#">November 2013</a></li>
-              <li><a href="#">October 2013</a></li>
-              <li><a href="#">September 2013</a></li>
-              <li><a href="#">August 2013</a></li>
-              <li><a href="#">July 2013</a></li>
-              <li><a href="#">June 2013</a></li>
-              <li><a href="#">May 2013</a></li>
-              <li><a href="#">April 2013</a></li>
-            </ol>
-          </div>
-
-          <div class="p-3">
-            <h4 class="font-italic">Elsewhere</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">GitHub</a></li>
-              <li><a href="#">Twitter</a></li>
-              <li><a href="#">Facebook</a></li>
-            </ol>
-          </div>
-        </aside><!-- /.blog-sidebar -->
+        <%@ include file="./components/sidebar.jsp" %>
 
       </div><!-- /.row -->
 
-    </main><!-- /.container -->
+    </div><!-- /.container -->
 
-    <%@include file="components/footer.jsp" %>>
+	<%@ include file="./components/footer.jsp" %>
   </body>
 </html>

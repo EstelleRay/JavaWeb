@@ -43,11 +43,14 @@ public class PostServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		String author = request.getParameter("author");
 		String postid = request.getParameter("postid");
+		String strPageNo = request.getParameter("pageNo");
 		PostDao postDao = new PostDao();
 		
 		if(action.equals("listposts")){
+			int pageSize = 10;
 			int postCount = 0;
 			List<Post> posts = null;
+			int pageNo = 0;
 			if(null != author && !"".equals(author)){
 				posts = postDao.queryByAuthor(author);
 			}else {

@@ -40,11 +40,12 @@
 		<jsp:include page='${"PostServlet" }' >
 			<jsp:param name="action" value="listposts" />
 			<jsp:param name="author" value="${param.author }" />
+			<jsp:param name="pageNo" value="${param.pageNo }" />
 		</jsp:include>
           
            <nav class="blog-pagination">
-            <a class="btn btn-outline-primary" href="#">Older</a>
-            <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+            <a class='btn btn-outline-${param.pageNo+1<pageCount ? "primary " : "secondary disabled"}' href="index.jsp?pageNo=${param.pageNo+1<pageCount ? param.pageNo+1 : param.pageNo }">Older</a>
+            <a class='btn btn-outline-${param.pageNo-1 >= 0 ? "primary " : "secondary disabled" }' href="index.jsp?pageNo=${param.pageNo-1 >= param.pageNo-1 : 0 }">Newer</a>
           </nav>
 
         </div><!-- /.blog-main -->

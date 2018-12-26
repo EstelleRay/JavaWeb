@@ -31,6 +31,44 @@ public class PostDao {
 				
 		return result==1;
 	}
+	
+	public boolean delete(int id) {
+		String sql = "DELETE FROM tb_posts WHERE Id=?";
+		Connection connection = DBUnit.getConneciton();
+		PreparedStatement pStatement = null;
+		int result = 0;
+		try {
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setInt(1, id);
+			result = pStatement.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBUnit.closeJDBC(null, pStatement, connection);
+		}
+		
+		return(result==1);
+	}
+	
+	public boolean update(Post post) {
+		String sql = "UPDATE tb_posts SET title=?,content=? WHERE Id=?";
+		Connection connection = DBUnit.getConneciton();
+		PreparedStatement pStatement = null;
+		int result = 0;
+		try {
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setString(1, post.getTitle());
+			pStatement.setString(2, post.getContent());
+			pStatement.setInt(3, post.getPostId());
+			result = pStatement.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBUnit.closeJDBC(null, pStatement, connection);
+		}
+		return(result==1);
+	}
+	
 	public List<Post> queryAll() {
 		Connection connection = DBUnit.getConneciton();
 		String sql = "SELECT * FROM tb_posts ORDER BY posttime DESC";

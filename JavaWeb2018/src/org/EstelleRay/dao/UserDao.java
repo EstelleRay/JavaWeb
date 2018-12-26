@@ -9,6 +9,7 @@ import org.EstelleRay.bean.User;
 
 import org.EstelleRay.util.DBUnit;
 
+
 public class UserDao {
 	
 	public boolean create(User user) {
@@ -58,5 +59,28 @@ public class UserDao {
 		}
 		
 		return user;
+	}
+	
+	public boolean update(User user) {
+		String sql = "UPDATE tb_user SET stuName=?, password=?, avatar=?, gender=?, bio=?, gitUrl=? WHERE stuId=?";
+		Connection connection = DBUnit.getConneciton();
+		PreparedStatement pStatement = null;
+		int result = 0;
+		try {
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setString(1, user.getStuName());
+			pStatement.setString(2, user.getPassword());
+			pStatement.setString(3, user.getAvatar());
+			pStatement.setString(4, user.getGender());
+			pStatement.setString(5, user.getBio());
+			pStatement.setString(6, user.getGitUrl());
+			pStatement.setString(7, user.getStuId());
+			result = pStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUnit.closeJDBC(null, pStatement, connection);
+		}
+		return (result==1);
 	}
 }

@@ -46,7 +46,7 @@
 		<%@ include file="./components/post-comments.jsp" %>
 	  </main>
 	  <!-- /.container -->
-
+     
 
 	<%@ include file="./components/footer.jsp" %>
   </body>
